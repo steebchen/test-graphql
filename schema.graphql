@@ -4,6 +4,7 @@ type Appointment {
   updatedAt: String!
   start: String!
   end: String!
+  name: String!
 }
 
 input AppointmentInput {
