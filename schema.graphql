@@ -1,0 +1,124 @@
+type Appointment {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  start: String!
+  end: String!
+}
+
+input AppointmentInput {
+  start: String!
+  end: String!
+}
+
+interface AuthPayload {
+  session: Session!
+  user: IUser!
+}
+
+type Branch {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  name: String
+  phoneNumber: String
+  image: String
+}
+
+input CreateCustomerAppointmentInput {
+  appointment: AppointmentInput!
+  employeeID: String!
+  branchID: String!
+}
+
+type Customer implements IUser, ICustomer {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  type: UserType!
+  email: String!
+  firstName: String
+  lastName: String
+  appointments: [Appointment!]!
+}
+
+type CustomerAppointmentPayload {
+  appointment: Appointment!
+}
+
+type Employee implements IUser, IEmployee {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  type: UserType!
+  email: String!
+  firstName: String
+  lastName: String
+  appointments: [Appointment!]!
+}
+
+interface ICustomer {
+  appointments: [Appointment!]!
+}
+
+interface IEmployee {
+  appointments: [Appointment!]!
+}
+
+interface IUser {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  type: UserType!
+  email: String!
+  firstName: String
+  lastName: String
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type LoginPayload implements AuthPayload {
+  session: Session!
+  user: IUser!
+}
+
+type LogoutPayload {
+  user: IUser!
+}
+
+type Mutation {
+  createCustomerAppointment(
+    input: CreateCustomerAppointmentInput!
+  ): CustomerAppointmentPayload
+  login(input: LoginInput!): LoginPayload!
+  logout: LogoutPayload!
+  register(input: RegisterInput!): RegisterPayload!
+}
+
+type Query {
+  branches: [Branch!]!
+  user: IUser!
+}
+
+input RegisterInput {
+  email: String!
+  password: String!
+}
+
+type RegisterPayload implements AuthPayload {
+  session: Session!
+  user: IUser!
+}
+
+type Session {
+  id: ID!
+  token: String!
+}
+
+enum UserType {
+  CUSTOMER
+  EMPLOYEE
+}
